@@ -40,8 +40,6 @@ The command `cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf` serves a specifi
 This configuration is a prerequisite step when setting up a Kubernetes cluster to ensure proper networking and container functionality.
 
 
-Let me explain these Linux commands that are part of Kubernetes network setup:
-
 The first set of commands loads required kernel modules:
 ```bash
 $ sudo modprobe overlay
