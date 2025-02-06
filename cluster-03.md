@@ -1,3 +1,4 @@
+```bash
 $ VERSION="1.27"
 $ OS="xUbuntu_22.04"
 
@@ -23,3 +24,5 @@ $ curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers
 $ sudo apt-get update
 
 $ sudo apt-get install cri-o cri-o-runc cri-tools -y
+```
+
