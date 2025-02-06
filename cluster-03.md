@@ -15,12 +15,26 @@ deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:
 /stable:/cri-o:/$VERSION/$OS/ /
 EOF
 
-$ curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:
-/stable:/cri-o:/$VERSION/$OS/Release.key | \
-    sudo apt-key add -
-$ curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:
-/stable/$OS/Release.key | \
-    sudo apt-key add -
+# First create the keyrings directory
+sudo mkdir -p /etc/apt/keyrings
+
+# Replace first curl command
+curl -fsSL https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/$VERSION/$OS/Release.key | \
+sudo gpg --dearmor -o /etc/apt/keyrings/devel_kubic_libcontainers_cri-o.gpg
+
+# Replace second curl command
+curl -fsSL https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/Release.key | \
+sudo gpg --dearmor -o /etc/apt/keyrings/devel_kubic_libcontainers.gpg
+
+# Update first repository
+echo "deb [signed-by=/etc/apt/keyrings/devel_kubic_libcontainers_cri-o.gpg] https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/$VERSION/$OS/ /" | \
+sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.list
+
+# Update second repository
+echo "deb [signed-by=/etc/apt/keyrings/devel_kubic_libcontainers.gpg] https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/ /" | \
+sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+
+
 
 $ sudo apt-get update
 
