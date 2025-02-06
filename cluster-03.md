@@ -58,3 +58,39 @@ Installs:
 The `-y` flag automatically answers yes to prompts
 
 This is typically used when setting up a Kubernetes environment, as CRI-O is a popular container runtime interface that implements the Kubernetes Container Runtime Interface (CRI).
+
+
+
+The `tee` command in Linux is like a T-shaped pipe (which is where its name comes from) that serves two purposes simultaneously:
+
+1. Primary Functions:
+- Reads from standard input (stdin)
+- Writes to standard output (stdout)
+- AND simultaneously writes to a file
+
+2. In the context of your code:
+```bash
+cat <<EOF | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+```
+
+The `tee` is being used because:
+- It allows writing to a system file that requires root privileges
+- Combines `sudo` permissions with output redirection
+- Shows the output in terminal while also writing to the file
+
+3. Why not just use > redirect?
+```bash
+# This wouldn't work:
+sudo echo "text" > /root/file  # Permission denied
+
+# This works:
+echo "text" | sudo tee /root/file
+```
+The redirect operator `>` operates with the current user's permissions, not sudo's. `tee` solves this by running with sudo privileges.
+
+4. Common Use Cases:
+- Writing to protected files while seeing the content
+- Creating log files while monitoring output
+- Splitting output streams for different purposes
+
+Think of it like a T-junction in a pipe: the input flows in and splits into two directions - one to the screen and one to the file.
