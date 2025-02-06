@@ -1,6 +1,6 @@
 ```bash
 
-$ VERSION="1.27"
+$ VERSION="1.32"
 $ OS="xUbuntu_22.04"
 
 $ cat <<EOF | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:
@@ -32,7 +32,7 @@ This code is a series of commands to set up CRI-O (Container Runtime Interface) 
 
 1. First two lines set variables:
 ```bash
-VERSION="1.27"
+VERSION="1.32"
 OS="xUbuntu_22.04"
 ```
 
