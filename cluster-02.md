@@ -9,6 +9,7 @@ $ sudo apt install cron -y
 $ sudo swapoff -a
 $ (sudo crontab -l 2>/dev/null; echo "@reboot /sbin/swapoff -a") | sudo crontab -
 || true
+```
 
 
 Let me break down these commands:
