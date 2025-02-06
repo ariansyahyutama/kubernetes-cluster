@@ -43,3 +43,35 @@ The command `cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf` serves a specifi
 
 This configuration is a prerequisite step when setting up a Kubernetes cluster to ensure proper networking and container functionality.
 
+```markdown
+The commands `sudo modprobe overlay` and `sudo modprobe br_netfilter` serve immediate loading purposes for Kubernetes setup:
+
+1. Purpose:
+   - These commands load kernel modules immediately without waiting for a system reboot
+   - They're used after configuring `/etc/modules-load.d/k8s.conf` to apply changes instantly
+
+2. Command Breakdown:
+   - `sudo`: Executes the command with root privileges
+   - `modprobe`: A command used to dynamically load or unload kernel modules
+
+3. Specific Modules:
+   - `overlay`:
+     - Loads the overlay filesystem module
+     - Essential for container operations
+     - Used by container runtimes like Docker and containerd
+   
+   - `br_netfilter`:
+     - Loads the bridge netfilter module
+     - Enables network bridge filtering
+     - Required for Kubernetes networking functionality
+
+4. Why Immediate Loading:
+   - While the `/etc/modules-load.d/k8s.conf` ensures modules load on boot
+   - These commands load the modules immediately
+   - Prevents the need for a system reboot
+   - Allows for immediate Kubernetes setup continuation
+
+These commands are essential preparation steps for setting up a Kubernetes environment.
+```
+
+
