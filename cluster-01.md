@@ -18,3 +18,13 @@ net.ipv4.ip_forward = 1
 EOF
 
 $ sudo sysctl --system
+
+
+Key elements to note:
+1. Use `#` for the main heading
+2. Use regular text for descriptions
+3. Use triple backticks (\`\`\`) with `bash` specification for code blocks
+4. Indent command blocks properly
+5. Use proper spacing between sections
+
+When you view this in GitHub, it will render with proper formatting and syntax highlighting for the code blocks.
