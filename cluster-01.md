@@ -40,25 +40,32 @@ The command `cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf` serves a specifi
 This configuration is a prerequisite step when setting up a Kubernetes cluster to ensure proper networking and container functionality.
 
 
-These commands are part of setting up Kubernetes networking configuration. Let me explain each part:
+Let me explain these Linux commands that are part of Kubernetes network setup:
 
-First two commands:
+The first set of commands loads required kernel modules:
+```bash
 $ sudo modprobe overlay
 $ sudo modprobe br_netfilter
-These commands load two essential kernel modules:
-- overlay: This enables the overlay filesystem needed for container operations
-- br_netfilter: This enables network bridge filtering for containers
+```
+These enable container operations and network bridging capabilities needed by Kubernetes.
 
-Next command:
+The next section creates a network configuration file:
+```bash
 $ cat <<EOF | sudo tee /etc/sysctl.d/k8s.conf
-This creates a new configuration file for Kubernetes networking settings with these parameters:
-- net.bridge.bridge-nf-call-iptables = 1: Enables iptables to see bridge traffic
-- net.bridge.bridge-nf-call-ip6tables = 1: Same as above but for IPv6
-- net.ipv4.ip_forward = 1: Enables IPv4 packet forwarding between containers
-EOF: Marks the end of the configuration input
+net.bridge.bridge-nf-call-iptables = 1
+net.bridge.bridge-nf-call-ip6tables = 1
+net.ipv4.ip_forward = 1
+EOF
+```
+This sets up three important network parameters:
+1. Enables iptables to handle bridge network traffic
+2. Same setting but for IPv6 traffic
+3. Allows IPv4 packet forwarding, which is crucial for container networking
 
-Final command:
+Finally, this command:
+```bash
 $ sudo sysctl --system
-This command reloads and applies all the system configurations we just set up. It activates the network settings immediately without requiring a system restart.
+```
+Activates all these network settings without needing to restart the system.
 
-These commands are essential preparation steps for setting up a Kubernetes cluster, ensuring proper network communication between containers and nodes.
+All these commands are necessary prerequisites for setting up a Kubernetes cluster, ensuring containers can communicate properly with each other.
