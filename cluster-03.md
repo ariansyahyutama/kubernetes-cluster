@@ -1,110 +1,60 @@
+Here's the complete Markdown document with the added section:
+
+# Define the Kubernetes version and used CRI-O stream
+
 ```bash
-
-$ VERSION="1.32"
-$ OS="xUbuntu_22.04"
-
-$ cat <<EOF | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:
-stable.list
-deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:
-/stable/$OS/ /
-EOF
-
-$ cat <<EOF | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:
-stable:cri-o:$VERSION.list
-deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:
-/stable:/cri-o:/$VERSION/$OS/ /
-EOF
-
-# First create the keyrings directory
-sudo mkdir -p /etc/apt/keyrings
-
-# Replace first curl command
-curl -fsSL https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/$VERSION/$OS/Release.key | \
-sudo gpg --dearmor -o /etc/apt/keyrings/devel_kubic_libcontainers_cri-o.gpg
-
-# Replace second curl command
-curl -fsSL https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/Release.key | \
-sudo gpg --dearmor -o /etc/apt/keyrings/devel_kubic_libcontainers.gpg
-
-# Update first repository
-echo "deb [signed-by=/etc/apt/keyrings/devel_kubic_libcontainers_cri-o.gpg] https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/$VERSION/$OS/ /" | \
-sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.list
-
-# Update second repository
-echo "deb [signed-by=/etc/apt/keyrings/devel_kubic_libcontainers.gpg] https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/ /" | \
-sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
-
-
-
-$ sudo apt-get update
-
-$ sudo apt-get install cri-o cri-o-runc cri-tools -y
+KUBERNETES_VERSION=v1.32
+CRIO_VERSION=v1.32
 ```
 
+# Distributions using deb packages
 
-This code is a series of commands to set up CRI-O (Container Runtime Interface) repositories and install related packages on an Ubuntu 22.04 system. Let's break it down:
+## Install the dependencies for adding repositories
 
-1. First two lines set variables:
 ```bash
-VERSION="1.32"
-OS="xUbuntu_22.04"
+apt-get update
+apt-get install -y software-properties-common curl
 ```
 
-2. The next two `cat` commands add repository sources to APT:
-- First adds the main libcontainers repository
-- Second adds the CRI-O specific repository
-Both use here-documents (<<EOF) to write to files in /etc/apt/sources.list.d/
+## Add the Kubernetes repository
 
-3. The two `curl` commands download and add the repository GPG keys:
 ```bash
-curl -L [URL]/Release.key | sudo apt-key add -
-```
-This is done for both repositories to verify package authenticity.
+curl -fsSL https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/deb/Release.key | \
+    gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
-4. `sudo apt-get update`
-Updates the package lists with the new repositories
-
-5. `sudo apt-get install cri-o cri-o-runc cri-tools -y`
-Installs:
-- cri-o: The main CRI-O container runtime
-- cri-o-runc: The container runtime utility
-- cri-tools: Tools for interacting with container runtimes
-The `-y` flag automatically answers yes to prompts
-
-This is typically used when setting up a Kubernetes environment, as CRI-O is a popular container runtime interface that implements the Kubernetes Container Runtime Interface (CRI).
-
-
-
-The `tee` command in Linux is like a T-shaped pipe (which is where its name comes from) that serves two purposes simultaneously:
-
-1. Primary Functions:
-- Reads from standard input (stdin)
-- Writes to standard output (stdout)
-- AND simultaneously writes to a file
-
-2. In the context of your code:
-```bash
-cat <<EOF | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$KUBERNETES_VERSION/deb/ /" | \
+    tee /etc/apt/sources.list.d/kubernetes.list
 ```
 
-The `tee` is being used because:
-- It allows writing to a system file that requires root privileges
-- Combines `sudo` permissions with output redirection
-- Shows the output in terminal while also writing to the file
+## Add the CRI-O repository
 
-3. Why not just use > redirect?
 ```bash
-# This wouldn't work:
-sudo echo "text" > /root/file  # Permission denied
+curl -fsSL https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/deb/Release.key | \
+    gpg --dearmor -o /etc/apt/keyrings/cri-o-apt-keyring.gpg
 
-# This works:
-echo "text" | sudo tee /root/file
+echo "deb [signed-by=/etc/apt/keyrings/cri-o-apt-keyring.gpg] https://pkgs.k8s.io/addons:/cri-o:/stable:/$CRIO_VERSION/deb/ /" | \
+    tee /etc/apt/sources.list.d/cri-o.list
 ```
-The redirect operator `>` operates with the current user's permissions, not sudo's. `tee` solves this by running with sudo privileges.
 
-4. Common Use Cases:
-- Writing to protected files while seeing the content
-- Creating log files while monitoring output
-- Splitting output streams for different purposes
+## Install the packages
 
-Think of it like a T-junction in a pipe: the input flows in and splits into two directions - one to the screen and one to the file.
+```bash
+apt-get update
+apt-get install -y cri-o kubelet kubeadm kubectl
+```
+
+## Start CRI-O
+
+```bash
+systemctl start crio.service
+```
+
+# Bootstrap a cluster
+
+```bash
+swapoff -a
+modprobe br_netfilter
+sysctl -w net.ipv4.ip_forward=1
+
+kubeadm init
+```
