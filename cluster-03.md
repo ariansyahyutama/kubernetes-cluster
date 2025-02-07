@@ -32,7 +32,11 @@ config cgroup
 
 ```bash
 containerd config default | sed 's/SystemdCgroup = false/SystemdCgroup = true/' | sed 's/registry.k8s.io\/pause:3.6/registry.k8s.io\/pause:3.9/' | sudo tee /etc/containerd/config.toml
+
+sudo systemctl restart containerd
 ```
+
+
 
 bootstaping
 
