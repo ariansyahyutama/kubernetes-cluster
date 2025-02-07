@@ -16,3 +16,12 @@ IPADDR=$(ip route get 8.8.8.8 | sed -n 's/.*src \([^\ ]*\).*/\1/p')
 POD_CIDR=192.168.0.0/16
 
 ```
+
+
+```bash
+sudo kubeadm init --apiserver-advertise-address=$IPADDR \
+    --apiserver-cert-extra-sans=$IPADDR  \
+    --pod-network-cidr=$POD_CIDR \
+    --node-name $NODENAME \
+    --ignore-preflight-errors Swap
+```
