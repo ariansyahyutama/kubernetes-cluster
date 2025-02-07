@@ -28,6 +28,11 @@ install kubeadm
 
 https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/
 
+config cgroup
+
+```bash
+containerd config default | sed 's/SystemdCgroup = false/SystemdCgroup = true/' | sed 's/registry.k8s.io\/pause:3.6/registry.k8s.io\/pause:3.9/' | sudo tee /etc/containerd/config.toml
+```
 
 bootstaping
 
