@@ -11,8 +11,8 @@ https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-ku
 bootstaping
 
 ```bash
-$ NODENAME=$(hostname -s)
-$ IPADDR=$(ip route get 8.8.8.8 | sed -n 's/.*src \([^\ ]*\).*/\1/p')
-$ POD_CIDR=192.168.0.0/16
+NODENAME=$(hostname -s)
+IPADDR=$(ip route get 8.8.8.8 | sed -n 's/.*src \([^\ ]*\).*/\1/p')
+POD_CIDR=192.168.0.0/16
 
 ```
