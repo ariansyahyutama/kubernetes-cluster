@@ -19,6 +19,10 @@ sudo apt-get update
 
 ```
 
+```bash
+sudo apt-get install containerd.io
+```
+
 
 install kubeadm
 
