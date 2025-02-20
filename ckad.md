@@ -134,3 +134,42 @@ Here's a summary of the Kubernetes security and resource management concepts:
 
 These components form the core of Kubernetes' security and resource management framework, enabling fine-grained control over cluster resources and access.
 
+
+Here's a complete summary of all Kubernetes master node components:
+
+1. Kube-apiserver:
+- Central control point for cluster operations
+- Handles all traffic and validates actions
+- Only component that connects to etcd
+- Manages authentication and authorization
+
+2. Kube-scheduler:
+- Assigns Pods to nodes based on resources
+- Uses pod-count algorithm by default
+- Considers quotas, taints, and tolerations
+- Allows custom scheduling configurations
+
+3. Etcd Database:
+- Stores cluster state and networking info
+- Uses b+tree key-value store
+- Appends values rather than modifying
+- Handles concurrent updates via kube-apiserver
+- Supports multi-master setup with failover
+- Works with kubeadm for cluster deployment
+
+4. Other Agents:
+- Kube-controller-manager:
+  * Core control loop daemon
+  * Monitors cluster state
+  * Manages multiple controllers (endpoints, namespace, replication)
+  * Ensures desired state matches actual state
+
+- Cloud-controller-manager:
+  * Handles external cloud interactions
+  * Manages cloud-specific operations
+  * Requires --cloud-provider-external settings
+  * Enables faster changes without affecting core processes
+
+This forms the complete control plane architecture of a Kubernetes master node.
+
+
