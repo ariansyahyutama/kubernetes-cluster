@@ -63,3 +63,7 @@ Technology Note:
   * Debated efficiency (mixed opinions on features)
 
 Key Difference: Shows evolution from simple, linear legacy systems to complex, interconnected cloud architecture with distributed responsibilities and multiple service points.
+
+
+<img width="878" alt="image" src="https://github.com/user-attachments/assets/1b696b85-425a-4e03-935d-84912cd56d26" />
+
