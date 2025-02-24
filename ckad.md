@@ -390,3 +390,42 @@ Think of it like:
 - Operator: "I'll set everything up and keep it running for you"
 
 This is much simpler than creating and managing all components manually. The Operator acts like an automated expert who knows how to properly set up and maintain your application.
+
+
+Here's a summary of Single IP per Pod in Kubernetes:
+
+1. Basic Structure:
+- Pod contains co-located containers
+- Shares single network namespace
+- Includes associated data volumes
+- Uses single IP address for all containers
+
+2. Components Shown in Diagram:
+- MainApp container
+- Logger container
+- Two data volumes (/data/ and /log/)
+- Docker Pause container
+- Single IP (192.168.5.34)
+
+3. Communication Methods:
+- Loopback interface
+- Common filesystem
+- Inter-process communication (IPC)
+- All containers share the same IP address
+
+4. Special Features:
+- Pause container manages IP address assignment
+- Multiple volume mount points possible
+- Network plugin support for multiple IPs (HPE labs)
+- dual-stack support for IPv4 and IPv6
+
+5. Technical Details:
+- Uses sudo docker ps for container visibility
+- kube-proxy iptables supports dual-stack networking
+- Containers can communicate internally through shared namespace
+- All traffic routes through single IP visible externally
+
+This architecture ensures efficient container communication within pods while maintaining network simplicity and security.
+
+<img width="461" alt="image" src="https://github.com/user-attachments/assets/32c8fac2-50da-4596-bf2b-a423c4e36b14" />
+
