@@ -429,7 +429,7 @@ This architecture ensures efficient container communication within pods while ma
 
 <img width="461" alt="image" src="https://github.com/user-attachments/assets/32c8fac2-50da-4596-bf2b-a423c4e36b14" />
 
-claude-sonnet: Here's a summary of Kubernetes Networking Setup:
+Here's a summary of Kubernetes Networking Setup:
 
 1. Basic Network Requirements:
 - Proper network setup essential for functional cluster
@@ -460,4 +460,54 @@ claude-sonnet: Here's a summary of Kubernetes Networking Setup:
 - Similar to traditional VM deployment but with Pod-centric approach
 
 This networking setup ensures proper communication between all components while maintaining security and efficiency within the Kubernetes cluster.
+
+
+
+Here's a summary of ClusterIP in Kubernetes:
+
+1. Basic Purpose:
+- Manages internal cluster traffic
+- Creates internal service endpoints
+
+2. Process Flow:
+1. NodePort creates ClusterIP
+2. Node port associates with ClusterIP
+3. LoadBalancer service follows sequence:
+   - Creates ClusterIP first
+   - Sets up NodePort
+   - Requests external load balancer
+
+3. Key Features:
+- Internal traffic management
+- Port association capabilities
+- Integration with load balancing
+
+4. Important Note:
+- If external load balancer isn't configured
+- EXTERNAL-IP remains in pending state
+- Pending status continues for service lifetime
+
+This mechanism ensures proper internal networking while providing options for external access configuration.
+
+<img width="553" alt="image" src="https://github.com/user-attachments/assets/a2b7adf2-4bbe-4a8a-bf58-ed975d5224fd" />
+
+Here's a summary of the Ingress Controller and Service Mesh section:
+
+1. Traffic Management Options:
+- Can use either Ingress Controller or service mesh (like Istio) to route traffic to Pods
+- Both provide ways to manage Pod connectivity
+
+2. Pod Configuration Example:
+- Features a multi-container Pod setup
+- Includes two distinct services
+  * One service dedicated to internal traffic only
+- Contains specialized containers:
+  * Sidecar container functioning as a logger with storage write capability
+  * Pause container for managing namespaces and IP addresses
+- Implements ingress controller for traffic management
+
+This setup demonstrates a comprehensive Pod configuration with various components working together for traffic management, logging, and network administration.
+
+<img width="645" alt="image" src="https://github.com/user-attachments/assets/88893bc2-488e-4944-bca1-822c0060d926" />
+
 
