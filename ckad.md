@@ -511,3 +511,4 @@ This setup demonstrates a comprehensive Pod configuration with various component
 <img width="645" alt="image" src="https://github.com/user-attachments/assets/88893bc2-488e-4944-bca1-822c0060d926" />
 
 
+<img width="968" alt="image" src="https://github.com/user-attachments/assets/f92fedc6-9ffd-4c6d-9005-694324295c73" />
