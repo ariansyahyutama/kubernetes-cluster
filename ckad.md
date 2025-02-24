@@ -238,3 +238,36 @@ $ kubectl delete -f newpod.yaml
 - One IP address per Pod (with some exceptions via HPE Labs plugin)
 - Containers within a Pod share network resources
 
+
+Here's a summary of Kubernetes Services:
+
+1. Core Purpose:
+- Acts as a flexible and scalable operator
+- Connects decoupled resources
+- Handles reconnection for failed/replaced components
+- Functions as a microservice for specific traffic handling
+
+2. Main Functions:
+- Manages NodePort and LoadBalancer operations
+- Distributes inbound requests across Pods
+- Controls access policies
+- Provides security for inbound requests
+
+3. Selector Types:
+a) Equality-based:
+- Filters using label keys and values
+- Uses operators: =, ==, and !=
+- Requires all conditions to match if multiple criteria
+
+b) Set-based:
+- Filters using value sets
+- Operators: in, notin, exists
+- Example: status notin (dev, test, maint)
+
+4. Key Features:
+- Works with kubectl for object connection
+- Provides continuous service despite Pod changes
+- Enables efficient traffic distribution
+- Maintains consistent resource management
+
+This service layer ensures reliable communication and load distribution while maintaining security and access control in a Kubernetes cluster.
