@@ -429,3 +429,35 @@ This architecture ensures efficient container communication within pods while ma
 
 <img width="461" alt="image" src="https://github.com/user-attachments/assets/32c8fac2-50da-4596-bf2b-a423c4e36b14" />
 
+claude-sonnet: Here's a summary of Kubernetes Networking Setup:
+
+1. Basic Network Requirements:
+- Proper network setup essential for functional cluster
+- Similar to IaaS VM deployment
+- Pod (not container) is the lowest compute unit
+- Each Pod shares single IP address
+
+2. Pod Networking Characteristics:
+- Acts like virtual machine for physical hosts
+- Requires IP address assignment
+- Needs traffic routes between Pods across nodes
+- Pods get IP before container startup
+
+3. Main Networking Challenges:
+- Container-to-container communication (solved by Pod concept)
+- Pod-to-Pod communications
+- External-to-Pod communications
+
+4. Communication Methods:
+- ClusterIP: Internal Pod connections
+- NodePort: External cluster access
+- LoadBalancer: Load distribution service
+
+5. Important Notes:
+- Network configuration for Pod-to-Pod communication must be pre-configured
+- Service objects manage network connections
+- System administrators must handle proper configuration
+- Similar to traditional VM deployment but with Pod-centric approach
+
+This networking setup ensures proper communication between all components while maintaining security and efficiency within the Kubernetes cluster.
+
