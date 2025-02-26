@@ -604,3 +604,44 @@ Let's trace a complete deployment creation:
 - **External-to-Pod Communication**: External Request → kube-proxy → Service → Pod
 
 This end-to-end flow demonstrates the core orchestration principles of Kubernetes: declarative configuration, control loops, and distributed operation.
+
+# CNI Network Configuration in Kubernetes: Summary
+
+## What is CNI?
+Container Network Interface (CNI) is a specification that standardizes how container networking is implemented in Kubernetes. It provides a common interface between container runtimes and networking solutions.
+
+## Key Features of CNI:
+- Language-agnostic specification for container networking
+- Used by kubeadm as the default network interface mechanism
+- Manages network configuration and resource cleanup
+- Provides a plugin architecture supporting multiple implementations (Amazon ECS, SR-IOV, Cloud Foundry, etc.)
+
+## Example Configuration:
+```json
+{
+  "cniVersion": "0.2.0",
+  "name": "mynet",
+  "type": "bridge",
+  "bridge": "cni0",
+  "isGateway": true,
+  "ipMasq": true,
+  "ipam": {
+    "type": "host-local",
+    "subnet": "10.22.0.0/16",
+    "routes": [
+      { "dst": "0.0.0.0/0" }
+    ]
+  }
+}
+```
+
+## How It Works:
+The CNI plugin configures network interfaces in the appropriate namespaces to properly define container networking. This example:
+- Creates a standard Linux bridge named "cni0"
+- Allocates IP addresses from the 10.22.0.0/16 subnet
+- Enables IP masquerading for outbound internet access
+- Uses host-local IPAM to manage IP addresses
+- Sets up default routing (0.0.0.0/0) for container traffic
+
+## Importance:
+CNI is critical to Kubernetes networking as it abstracts away the complexity of different networking implementations, allowing the container orchestration to focus on workload management while delegating networking to specialized plugins.
