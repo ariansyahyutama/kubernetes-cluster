@@ -512,3 +512,95 @@ This setup demonstrates a comprehensive Pod configuration with various component
 
 
 <img width="968" alt="image" src="https://github.com/user-attachments/assets/f92fedc6-9ffd-4c6d-9005-694324295c73" />
+
+# End-to-End Flow of Kubernetes Components
+
+Based on the diagram, I'll explain the complete workflow of how Kubernetes components interact when processing a request.
+
+## 1. API Request Initiation
+
+**Flow starts with:**
+- A user or system initiates an API call using `kubectl` or a direct API call (e.g., using curl)
+- The request is directed to the Kubernetes API server (kube-apiserver)
+
+## 2. Control Plane Processing
+
+### API Server Processing
+- **kube-apiserver** receives the request and:
+  - Authenticates the user
+  - Authorizes the request against RBAC policies
+  - Validates the request payload
+  - Applies admission controllers
+
+### Storage Interaction
+- **kube-apiserver** interacts with **etcd**:
+  - Reads current state from etcd for GET operations
+  - Stores updated state to etcd for POST/PUT/DELETE operations
+  - Ensures data consistency
+
+### Controller Manager Actions
+- **kube-controller-manager** continuously:
+  - Watches API server for changes to resources
+  - Processes reconciliation loops to maintain desired state
+  - Manages controllers like ReplicaSet, Deployment, StatefulSet, etc.
+  - Updates resource status back through the API server
+
+### Scheduler Decisions
+- **kube-scheduler**:
+  - Observes new pods with no node assignment
+  - Evaluates node constraints, resource requirements, and affinity rules
+  - Selects optimal node placement
+  - Updates the pod specification with node binding through API server
+
+## 3. Worker Node Operations
+
+### Kubelet Operations
+- **kubelet** on each worker node:
+  - Watches API server for pod assignments to its node
+  - Pulls container images via **docker/cri-o**
+  - Creates and manages containers
+  - Reports pod status back to API server
+  - Monitors container health
+  - Performs liveness/readiness probes
+
+### Network Proxy
+- **kube-proxy** on each node:
+  - Maintains network rules (iptables/ipvs)
+  - Enables pod-to-pod communication across the cluster
+  - Implements Services to provide stable endpoints for pods
+  - Routes external traffic to appropriate pods
+
+### Container Runtime
+- **docker/cri-o**:
+  - Pulls images from registries
+  - Creates containers based on pod specifications
+  - Manages container lifecycle
+  - Allocates resources to containers
+
+## 4. Complete Request Lifecycle Example
+
+Let's trace a complete deployment creation:
+
+1. User submits: `kubectl create deployment nginx --image=nginx:latest`
+2. kubectl transforms this into an API request to kube-apiserver
+3. kube-apiserver authenticates, validates and stores the Deployment in etcd
+4. Deployment controller in kube-controller-manager:
+   - Detects new Deployment
+   - Creates a ReplicaSet
+5. ReplicaSet controller:
+   - Creates Pod specifications
+6. kube-scheduler:
+   - Assigns nodes to Pods
+7. kubelet on assigned nodes:
+   - Detects Pod assignments
+   - Instructs container runtime to pull images and start containers
+8. kube-proxy:
+   - Updates network rules to make Pods accessible
+9. Status updates flow back to API server and get stored in etcd
+
+## 5. Networking Path
+
+- **Pod-to-Pod Communication**: Pod → Container Network Interface → kube-proxy (iptables/ipvs) → Network → Destination Pod
+- **External-to-Pod Communication**: External Request → kube-proxy → Service → Pod
+
+This end-to-end flow demonstrates the core orchestration principles of Kubernetes: declarative configuration, control loops, and distributed operation.
