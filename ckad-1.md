@@ -645,3 +645,29 @@ The CNI plugin configures network interfaces in the appropriate namespaces to pr
 
 ## Importance:
 CNI is critical to Kubernetes networking as it abstracts away the complexity of different networking implementations, allowing the container orchestration to focus on workload management while delegating networking to specialized plugins.
+
+
+# Pod-to-Pod Communication in Kubernetes: Summary
+
+## Limitations of CNI
+While CNI plugins provide individual pod networking and IP assignment, they don't inherently solve the challenge of pod-to-pod communication across different nodes in a Kubernetes cluster.
+
+## Core Kubernetes Networking Requirements
+- **Universal communication**: All pods must be able to communicate with all other pods across nodes
+- **Node-to-pod communication**: All nodes must be able to communicate with all pods
+- **No NAT requirement**: Communication should occur without Network Address Translation
+
+## Implementation Approaches
+The requirement for all IPs (nodes and pods) to be routable without NAT can be achieved through:
+
+1. **Physical network infrastructure** configuration (e.g., Google Kubernetes Engine)
+2. **Software-defined overlay networks** using solutions such as:
+   - Flannel
+   - Calico
+   - Cilium
+
+## Network Policies
+Most modern network plugins now support Network Policies, which function as internal firewalls to control ingress and egress traffic between pods, providing security and traffic isolation.
+
+## Documentation
+For deeper understanding, refer to the "Cluster Networking" documentation or explore the various networking add-ons available for Kubernetes.
