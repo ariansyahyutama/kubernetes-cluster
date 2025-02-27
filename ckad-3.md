@@ -60,3 +60,32 @@ The CRI project is still evolving, with significant ongoing development:
 ## Significance
 
 CRI represents Kubernetes' commitment to modularity and flexibility, allowing for runtime independence and avoiding vendor lock-in. By standardizing this interface, Kubernetes enables easier adoption of new container technologies as they emerge without requiring architectural changes to the core platform.
+
+# containerd: Summary
+
+## Purpose and Design Philosophy
+containerd is not designed as a user-facing container tool, but rather as a specialized backend container runtime that focuses on providing:
+- Highly-decoupled low-level primitives
+- Modular architecture with minimal overhead
+- Infrastructure-level container management capabilities
+
+## Key Characteristics
+- Uses runC as its default execution engine to run containers according to OCI Specifications
+- Specifically designed to be embedded within larger systems and platforms
+- Provides minimal CLI functionality, primarily for debugging and development purposes
+- Optimized for performance in large-scale environments
+
+## Adoption and Ecosystem
+- Widely used by major cloud providers due to its efficiency and low overhead
+- Serves as the foundation for higher-level user tools such as:
+  - crictl
+  - ctr
+  - nerdctl
+
+## Target Use Case
+containerd is particularly well-suited for:
+- Integration and operations teams building specialized container platforms
+- Cloud infrastructure providers requiring high-performance container runtimes
+- Systems that need fine-grained control over container lifecycle management
+
+Unlike Docker, containerd is not intended for direct use in typical application development workflows involving building, shipping, and running applications.
