@@ -29,3 +29,34 @@ The container ecosystem is clearly trending toward:
 - Reduced dependence on single-vendor solutions
 
 As Docker's ownership changed to Mirantis, many organizations have migrated to other open source container technologies, prioritizing flexibility and avoiding vendor lock-in.
+
+# Container Runtime Interface (CRI): Summary
+
+## Purpose and Function
+
+The Container Runtime Interface (CRI) is a standardized specification designed to simplify the integration of container runtimes with kubelet, the primary node agent in Kubernetes. It creates a clean abstraction layer that allows:
+
+- Easy integration of new container runtimes with Kubernetes
+- Separation of concerns between kubelet and container runtime technologies
+- Implementation of container runtimes without detailed knowledge of kubelet internals
+
+## Technical Implementation
+
+CRI establishes a well-defined API using Protocol Buffers (protobuf) to standardize:
+- API specifications
+- Libraries
+- Communication patterns between kubelet and container runtime components
+
+## Development Status
+
+The CRI project is still evolving, with significant ongoing development:
+
+- Docker-CRI integration has been completed
+- Several runtimes are currently in active development:
+  - CRI-O
+  - rktlet
+  - frakti
+
+## Significance
+
+CRI represents Kubernetes' commitment to modularity and flexibility, allowing for runtime independence and avoiding vendor lock-in. By standardizing this interface, Kubernetes enables easier adoption of new container technologies as they emerge without requiring architectural changes to the core platform.
