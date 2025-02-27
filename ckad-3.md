@@ -313,3 +313,14 @@ The text explains the benefits of creating a local Docker repository instead of 
 
 After setting up a local repository, users can populate it with local images using the `docker tag` command followed by the `push` command. The text suggests initially creating an insecure repository for testing purposes before implementing TLS access for enhanced security.
 
+# Summary: Creating a Deployment
+
+This section explains how to create deployments in Kubernetes after successfully pushing and pulling images using podman, crictl, or docker commands. Key points include:
+
+1. Use `kubectl create` to deploy applications with the `--image` argument that specifies the repository, application name, and version
+2. Example command: `kubectl create deployment time-date --image=10.110.186.162:5000/simpleapp:v2.2`
+3. Important warning about using "latest" tag - it doesn't automatically reference the most current version
+4. Verify deployment success with `kubectl get pods` to ensure pods and containers are running properly
+5. Test application functionality and resilience by checking performance and pod transience
+
+The guide provides a practical workflow for deploying containerized applications in a Kubernetes environment.
