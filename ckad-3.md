@@ -306,3 +306,10 @@ The standard workflow for containerizing an application includes:
 
 This structured approach ensures that applications can be consistently containerized with the necessary runtime environment, dependencies, and configurations, making them portable across different systems.
 
+
+# Summary: Hosting a Local Repository
+
+The text explains the benefits of creating a local Docker repository instead of uploading images to Docker Hub. While Docker Hub makes image sharing easy, those images become publicly accessible. A local repository offers privacy and security benefits and can reduce bandwidth usage despite requiring more administrative work.
+
+After setting up a local repository, users can populate it with local images using the `docker tag` command followed by the `push` command. The text suggests initially creating an insecure repository for testing purposes before implementing TLS access for enhanced security.
+
