@@ -189,3 +189,32 @@ Despite the rise of alternative container technologies, Docker remains:
 - Well-established outside Red Hat environments
 
 The industry trend is moving toward open standards and specialized tools like CRI-O, though Docker continues to maintain significant market presence due to its established ecosystem and user familiarity.
+
+
+# rkt (Rocket): Summary
+
+## Overview
+rkt (pronounced "rocket") is a container runtime that emerged as an alternative to Docker. Announced by CoreOS in 2014, it was developed with a focus on enhanced security, openness, and interoperability compared to early Docker implementations.
+
+## Key Features
+- Command-line interface for running containers
+- Support for multiple container formats (Docker, appc, OCI)
+- Deployment of immutable pods
+- Based on the App Container (appc) specification
+- Designed with security and openness as primary objectives
+
+## Historical Context
+rkt was created to address perceived issues with Docker's initial approach to containers, particularly around security and standards compliance. While many of rkt's innovative features were eventually matched by Docker improvements, it never achieved the same level of widespread adoption.
+
+## Current Status
+rkt has officially been archived:
+- Development ceased after Red Hat acquired CoreOS
+- Resources were redirected to focus on CRI-O instead
+- It became the first CNCF project to be formally archived
+- The codebase remains available for forking, but no active development is occurring
+
+## Legacy
+Despite its discontinued status, rkt played an important role in the container ecosystem:
+- Pushed the industry toward more open standards
+- Influenced security improvements in container runtimes
+- Temporarily positioned as a potential Docker replacement before CRI-O gained prominence
