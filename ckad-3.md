@@ -306,3 +306,28 @@ The image describes the three common patterns for secondary containers in Kubern
 3. **Sidecar**: Provides supplementary functionality not found in the primary application, similar to how a motorcycle sidecar carries extra items without providing the main power. Logging containers are a typical example of this pattern.
 
 Each pattern serves a specific purpose to enhance the functionality of the primary container without requiring modifications to its core implementation.
+
+
+# Readiness Probe Simplified
+
+Readiness probes prevent containers from receiving traffic until they're fully initialized. This is especially important during scaling when containers may be in various startup states. Three main types:
+
+1. **Exec Probe**: Runs a command inside the container and considers it ready only when the command returns a zero exit code.
+
+2. **HTTP GET Probe**: Sends an HTTP request to a specified port and path. The container is ready when the server returns a response code between 200-399.
+
+3. **TCP Socket Probe**: Attempts to open a socket connection to a specific port. Once the connection succeeds, the container is considered ready.
+
+All probes keep trying periodically until the container reaches a healthy state, ensuring applications only receive traffic when truly ready to handle it.
+
+
+# Liveness Probe Summary
+
+Liveness probes continuously monitor container health throughout its lifecycle. Unlike readiness probes (which prevent traffic until initialization), liveness probes ensure ongoing health after a container is running. Key points:
+
+- Provides health monitoring for applications without built-in health checking
+- Regularly tests if a container remains in a healthy state
+- Automatically terminates containers that fail the probe
+- When managed by a controller, terminated containers are replaced with new instances
+
+This mechanism ensures system reliability by automatically detecting and replacing unhealthy containers without manual intervention.
