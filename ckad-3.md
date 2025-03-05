@@ -331,3 +331,17 @@ Liveness probes continuously monitor container health throughout its lifecycle. 
 - When managed by a controller, terminated containers are replaced with new instances
 
 This mechanism ensures system reliability by automatically detecting and replacing unhealthy containers without manual intervention.
+
+
+# startupProbe Summary
+
+startupProbe is a mechanism designed for applications that require extended startup times, particularly legacy applications. Key points:
+
+- It prevents premature container restarts by delaying regular health checks until the application is fully initialized
+- When enabled in kubelet, it disables liveness and readiness checks until the application passes the startup test
+- The failure determination is calculated by: failureThreshold × periodSeconds
+- Example calculations:
+  * With periodSeconds=5 and failureThreshold=10: Tests every 5 seconds, fails after 50 seconds total
+  * With periodSeconds=60 and failureThreshold=5: Tests every 60 seconds, fails after 5 minutes total
+
+This feature is essential for preventing unnecessary container recycling when applications have legitimate longer startup requirements.
