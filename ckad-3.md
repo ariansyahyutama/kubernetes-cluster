@@ -345,3 +345,14 @@ startupProbe is a mechanism designed for applications that require extended star
   * With periodSeconds=60 and failureThreshold=5: Tests every 60 seconds, fails after 5 minutes total
 
 This feature is essential for preventing unnecessary container recycling when applications have legitimate longer startup requirements.
+
+# Helm Summary
+
+Helm is the package manager for Kubernetes that facilitates the deployment of images and other objects. It utilizes charts, which are collections of YAML files, to deploy one or more objects in a Kubernetes environment. 
+
+Key features:
+- Charts provide flexibility through customizable `values.yaml` files that can be edited before deployment
+- Charts can be sourced from various locations
+- ArtifactHub serves as a centralized repository for publishing and discovering Helm charts
+
+This approach simplifies the process of packaging, distributing, and deploying Kubernetes applications.
