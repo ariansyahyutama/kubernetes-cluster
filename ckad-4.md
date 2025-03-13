@@ -117,3 +117,68 @@ Key points about ephemeral storage management:
 - Ephemeral storage resources are specified in YAML using:
   - spec.containers[].resources.limits.ephemeral-storage
   - spec.containers[].resources.requests.ephemeral-storage
+
+
+# Summary: Using Label Selectors in Kubernetes
+
+Labels are a powerful mechanism in Kubernetes for organizing and selecting objects:
+
+- Labels enable selection of objects that may not share other characteristics
+- Operators (watch-loops) track and manage objects using labels
+- Hard-coding the same label for different objects can cause conflicts when managed by different operators
+- Consider using different labels to distinguish environments (e.g., development/production), departments, teams, and developers
+- Selectors are namespace-scoped by default but can be expanded with the `--all-namespaces` argument
+- Object metadata, including labels, can be viewed with `kubectl get object-name -o yaml`
+
+Example:
+```
+apiVersion: v1
+kind: Pod
+metadata:
+  annotations:
+    cni.projectcalico.org/podIP: 192.168.113.220/32
+  creationTimestamp: "2024-06-11T15:13:082"
+  generateName: examplepod-1234-
+  labels:
+    app: examplepod
+    pod-template-hash: 1234
+  name: examplepod-1234-vtlzd
+```
+
+Key usage hint: When selecting pods by label, use equals sign (=) instead of colon (:) in command line, with no spaces, and apply `-l` or `--selector` options with kubectl.
+
+# Summary: Using Built-in Labels and Node Selectors in Kubernetes
+
+Kubernetes provides built-in labels and selector functionality:
+
+- Labels can be used to query specific resources with the `--selector` flag
+- Example command to select pods by app label:
+```
+ckad1$ kubectl -n test2 get --selector app=examplepod pod
+```
+
+- Nodes have built-in labels including `arch`, `hostname`, and `os`
+- These built-in labels can be used to assign pods to specific node types
+- Viewing node labels:
+```
+ckad1$ kubectl get node worker
+
+...
+creationTimestamp: "2024-06-10T14:23:042"
+labels:
+  beta.kubernetes.io/arch: amd64
+  beta.kubernetes.io/os: linux
+  kubernetes.io/arch: amd64
+  kubernetes.io/hostname: worker
+  kubernetes.io/os: linux
+managedFields:
+...
+```
+
+- The `nodeSelector` field in a pod specification can target specific nodes:
+```
+spec:
+  nodeSelector:
+    kubernetes.io/hostname: worker
+  containers:
+```
