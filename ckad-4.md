@@ -105,3 +105,15 @@ Key points about memory management in Kubernetes:
   - spec.containers[].resources.limits.memory
   - spec.containers[].resources.requests.memory
 
+
+# Summary: Ephemeral Storage in Kubernetes
+
+Key points about ephemeral storage management:
+
+- Container files, logs, EmptyDir storage, and Kubernetes cluster data are stored on the host node's root filesystem
+- Ephemeral storage is a limited resource that requires management like CPU and memory
+- The Kubernetes scheduler only selects nodes with sufficient space to accommodate the sum of all container requests
+- If a container or the combined containers in a pod exceed their storage limit, the pod will be evicted
+- Ephemeral storage resources are specified in YAML using:
+  - spec.containers[].resources.limits.ephemeral-storage
+  - spec.containers[].resources.requests.ephemeral-storage
