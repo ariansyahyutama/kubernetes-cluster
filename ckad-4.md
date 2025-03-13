@@ -182,3 +182,127 @@ spec:
     kubernetes.io/hostname: worker
   containers:
 ```
+
+# Summary: Multi-Container Pods
+
+While multi-container pods may seem to contradict Kubernetes' decoupling philosophy, they serve important purposes:
+
+- Running an entire OS in a single container would sacrifice Kubernetes' granular scalability benefits
+- Adding additional co-located containers in a pod can make sense for certain use cases
+- Multiple containers in a pod can each be optimized and developed independently
+- This approach maintains scalability while allowing containers to be repurposed to meet workload needs
+- The multi-container model balances the benefits of co-location with the advantages of Kubernetes' flexible architecture
+
+# Summary: Sidecar, Adapter, Ambassador and initContainers
+
+Multi-container pod patterns serve specific purposes in Kubernetes:
+
+**Sidecar Container:**
+- Adds functionality missing from main container
+- Keeps core application decoupled and scalable
+- Handles auxiliary functions like logging (e.g., Fluentd) or monitoring (e.g., Prometheus)
+
+**Adapter Container:**
+- Modifies data on ingress or egress to match specific needs
+- Standardizes output format between applications and monitoring tools
+- Transforms varied application outputs into a unified format without modifying either side
+
+**Ambassador Container:**
+- Functions as a Kubernetes-native API gateway built on Envoy
+- Provides external access without implementing custom services or ingress controllers
+- Handles local connection proxying, request limiting, and routing from main container to outside world
+
+**initContainer:**
+- Runs and completes before main containers start
+- Used for prerequisites, verification, or setup tasks
+- Example: Running checksum verification and security scans before starting main containers
+- Only after successful completion of initContainers will application containers start
+
+spec:
+  containers:
+  - name: intended
+    image: workload
+  initContainers:
+  - name: scanner
+    image: scanapp
+
+# Summary: Custom Resource Definitions in Kubernetes
+
+Custom Resource Definitions (CRDs) extend Kubernetes' functionality beyond built-in resources:
+
+- CRDs allow dynamic addition of new resources to Kubernetes clusters
+- Once added, custom resources can be managed using standard tools like `kubectl`
+- Custom resources are stored as structured data in the etcd database and accessed via kube-apiserver
+- A controller/operator is needed to continuously monitor and reconcile the desired state for custom resources
+- Custom operators automate tasks that would otherwise require manual intervention outside Kubernetes
+
+Two methods to add custom resources:
+1. Custom Resource Definitions - simpler but less flexible
+2. Aggregated APIs - more flexible but requires writing a new API server
+
+The Kubernetes reconciliation workflow for custom resources follows the same pattern as built-in resources:
+- Operators use watch loops to monitor the kube-apiserver
+- When actual state doesn't match declared state, the controller makes API calls to resolve the difference
+- CRDs are added to the API path under `apiextensions.k8s.io/v1`
+
+Resources for finding existing operators:
+- Clusters using Calico already employ several CRDs
+- GitHub has more information on the operator framework and SDK
+- OperatorHub website catalogs existing operators that may be useful
+
+# Understanding Custom Resource Definitions (CRDs) in Kubernetes
+
+## What are CRDs?
+
+A Custom Resource Definition (CRD) is a way to extend Kubernetes' API by creating your own custom resources. Think of it as adding a new type of object to Kubernetes beyond the built-in ones like Pods, Deployments, or Services.
+
+## How CRDs Work - A Simplified Explanation
+
+1. **Standard Kubernetes Resources**
+   - By default, Kubernetes knows about certain objects like Pods, Services, etc.
+   - These are part of the core API (like `apps/v1`, `core/v1`)
+
+2. **Creating Your Own Custom Resources**
+   - Let's say you want Kubernetes to understand a new type of object - like a "Database" or "MessageQueue"
+   - CRDs let you teach Kubernetes about these new objects
+
+3. **The Components**:
+   - **Custom Resource Definition (CRD)**: The schema that defines your new resource type
+   - **Custom Resource (CR)**: An instance of your custom type
+   - **Custom Controller/Operator**: The software that knows how to manage your custom resources
+
+## Real-World Example
+
+Imagine you want to manage PostgreSQL databases in Kubernetes:
+
+1. You create a CRD called `PostgreSQL` that specifies:
+   - What properties a PostgreSQL resource should have (storage size, version, replicas)
+   - What API group it belongs to (e.g., `databases.example.com/v1`)
+
+2. Now users can create PostgreSQL resources:
+```yaml
+apiVersion: databases.example.com/v1
+kind: PostgreSQL
+metadata:
+  name: my-production-db
+spec:
+  version: "13.1"
+  storage: 100Gi
+  replicas: 3
+```
+
+3. A PostgreSQL operator (controller) watches for these resources and:
+   - Detects when a new PostgreSQL resource is created
+   - Sets up actual PostgreSQL instances in the cluster
+   - Configures backups, replication, etc.
+   - Maintains the database according to the specification
+
+## Benefits of CRDs
+
+1. **Domain-Specific Abstractions**: Create objects that match your business domain
+2. **Declarative Management**: Manage complex applications through simple YAML
+3. **Kubernetes-Native Experience**: Use `kubectl` and other familiar tools
+4. **GitOps Compatible**: Store your custom resources in Git like other Kubernetes resources
+5. **Automation**: Controllers automate complex operational tasks
+
+CRDs allow you to extend Kubernetes to handle specialized workloads while maintaining the same consistent user experience and workflow that makes Kubernetes powerful.
